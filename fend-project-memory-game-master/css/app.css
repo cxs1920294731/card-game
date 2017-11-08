@@ -107,3 +107,38 @@ h1 {
     float: right;
     cursor: pointer;
 }
+.animated.flipInY{
+    animation-duration: 0.2s;
+    animation-delay: 0s;
+}
+h4,
+p{
+    margin: 0;
+}
+.layer{
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    padding-top: 10%;
+    background-color: #ffffff;
+    text-align: center;
+}
+.layer h4{
+    font-size: 24px;
+}
+.layer p{
+    color: #ccc;
+}
+.layer .restart{
+    display: block;
+    margin: 20px auto;
+    width: 140px;
+    padding: 8px;
+    color: #ffffff;
+    border-radius: 5px;
+    background-color: #02ccba;
+    cursor: pointer;
+}
