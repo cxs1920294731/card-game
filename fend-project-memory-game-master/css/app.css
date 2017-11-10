@@ -80,7 +80,16 @@ h1 {
     background: #02ccba;
     font-size: 33px;
 }
-
+@media screen and (max-width: 662px) {
+    .deck {
+        width: 350px;
+        min-height: 350px;
+    }
+    .deck .card {
+        height: 65px;
+        width: 65px;
+    }
+}
 /*
  * Styles for the Score Panel
  */
@@ -141,4 +150,7 @@ p{
     border-radius: 5px;
     background-color: #02ccba;
     cursor: pointer;
+}
+.time{
+    padding-left: 20px;
 }

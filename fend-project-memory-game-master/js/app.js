@@ -1,3 +1,4 @@
+'use strict'
 /*
  * Create a list that holds all of your cards
  */
@@ -37,38 +38,45 @@ function shuffle(array) {
  */
 $(function () {
     var steps = [];//存储上次点击的节点
-    var className= ['fa-diamond','fa-paper-plane-o','fa-anchor','fa-bolt',
-        'fa-cube','fa-leaf','fa-bicycle','fa-bomb'];
+    var className = ['fa-diamond', 'fa-paper-plane-o', 'fa-anchor', 'fa-bolt',
+        'fa-cube', 'fa-leaf', 'fa-bicycle', 'fa-bomb'];
     var stepNum = 0;//存储匹配多少次
-    $('body').on('click','.card:not(.match)',function () {
+    var setInter = '';
+    var timeNum = 0;
+    $('body').on('click', '.card:not(.match)', function () {
         var dom = $(this);
         openCard(dom);
         match(dom);
     });
-    $('body').on('click','.restart',function () {
+    $('body').on('click', '.restart', function () {
         $('.layer').fadeOut();
         init();
     });
     //初始化，得到重新开始游戏功能
     var init = function () {
-        steps= [];
+        timeNum=0;
+        steps = [];
         stepNum = 0;
         $('.score-panel .moves').text(stepNum);
         $('.stars .fa').removeClass().addClass('fa fa-star');
         var domArray = $('.card .fa').removeClass().addClass('fa');
         var numArray = getRandom();
-        var className2=className.concat(className);
+        var className2 = className.concat(className);
         $('.card').removeClass().addClass('card');
-        for(var i= 0,j=domArray.length;i<j;i++){
-            var x= numArray[i];
+        for (let i = 0, j = domArray.length; i < j; i++) {
+            let x = numArray[i];
             domArray.eq(x).addClass(className2[i]);
         }
+        setInter=setInterval(function () {
+            $('.time').text(timeNum);
+            timeNum++;
+        },1000)
     };
     var getRandom = function () {
         var N = 16;
         var arr = [];
         var ranArr = [];
-        for (var i = 0; i < N; i++) {
+        for (let i = 0; i < N; i++) {
             arr[i] = i;
         }
         do {
@@ -85,35 +93,35 @@ $(function () {
     var match = function (dom) {
         steps.push(dom);
         var length = steps.length;
-        if(length > 1){
-            var beforDom =$( steps[0]);
-            if (beforDom.is(dom)){
-                console.log(steps.length,1)
+        if (length > 1) {
+            var beforDom = $(steps[0]);
+            if (beforDom.is(dom)) {
+                console.log(steps.length, 1)
                 steps.pop();
-            }else {
-                console.log(steps.length,2)
+            } else {
+                console.log(steps.length, 2)
                 getStart();
-                if (getCardStyle(dom.children('.fa')) == getCardStyle(beforDom.children('.fa'))){
-                    steps=[];
+                if (getCardStyle(dom.children('.fa')) == getCardStyle(beforDom.children('.fa'))) {
+                    steps = [];
                     setTimeout(function () {
                         matchSuccess(beforDom);
                         matchSuccess(dom);
                         gameSuccess();
-                    },300);
-                }else {
-                    steps=[];
+                    }, 300);
+                } else {
+                    steps = [];
                     setTimeout(function () {
                         matchFaile(beforDom);
                         matchFaile(dom);
-                    },300);
+                    }, 300);
                 }
             }
         }
     };
     var gameSuccess = function () {
-        doms = $('.card');
-        for (var i= 0,j=doms.length;i<j;i++){
-            if (!doms.eq(i).hasClass('match')){
+        var doms = $('.card');
+        for (let i = 0, j = doms.length; i < j; i++) {
+            if (!doms.eq(i).hasClass('match')) {
                 console.log('game false');
                 return false;
             }
@@ -121,20 +129,21 @@ $(function () {
         console.log('game success');
         setTimeout(function () {
             $('.layer').fadeIn();
-        },1500);
+            clearInterval(setInter);
+        }, 1500);
         return true;
     }
     var matchSuccess = function (dom) {
         dom.addClass('rubberBand animated');
         dom.addClass('match');
         dom.removeClass('open show');
-        dom.one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend',function () {
+        dom.one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', function () {
             dom.removeClass('rubberBand animated');
         });
     };
-    var matchFaile= function (dom) {
+    var matchFaile = function (dom) {
         dom.addClass('animated shake');
-        dom.one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend',function () {
+        dom.one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', function () {
             dom.removeClass('animated shake open show');
         });
     }
@@ -157,16 +166,16 @@ $(function () {
         var nameArray = dom.prop("className").split(' ');
         return nameArray[1];
     };
-    var getStart= function () {
+    var getStart = function () {
         stepNum++;
         $('.score-panel .moves').text(stepNum);
         $('.layer .stepNum').text(stepNum);
-        if (stepNum < 9){
+        if (stepNum < 9) {
             $('.layer .starNum').text(3);
-        }else if (stepNum<14){
+        } else if (stepNum < 14) {
             $('.stars .fa').eq(2).removeClass('fa-star').addClass('fa-star-o');
             $('.layer .starNum').text(2);
-        }else {
+        } else {
             $('.stars .fa').eq(1).removeClass('fa-star').addClass('fa-star-o')
             $('.layer .starNum').text(3);
         }
